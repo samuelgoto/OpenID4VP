@@ -1013,7 +1013,7 @@ const {token: {vpToken}} = await navigator.credentials.get({
       nonce: "n-0S6_WzA2Mj",
       // The Wallet is told to respond through the browser/platform API
       // rather than direct_post / redirects.
-      response_mode="platform-api",
+      response_mode:"platform-api",
       // redirect_uri is explicitly missing because response_mode="platform_api"
     },
     selector: {
