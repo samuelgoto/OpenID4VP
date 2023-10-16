@@ -215,6 +215,8 @@ Figure: Cross Device Flow
 
 (3) The Wallet prepares the Verifiable Presentation(s) of the Verifiable Credential(s) that the End-User has consented to. It then sends to the Verifier an Authorization Response where the Verifiable Presentation(s) are contained in the `vp_token` parameter.
 
+Additionally, as a user experience optimization when available, the Verifier MAY choose to call the Platform API described in (#platform-api) to have the credentials offered even before the user opens their QR code scanner.
+
 # Scope
 
 OpenID for Verifiable Presentations extends existing OAuth 2.0 mechanisms as following:
