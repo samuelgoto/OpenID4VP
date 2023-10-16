@@ -991,22 +991,22 @@ The Verifier MUST use:
   - The Platform API returns a single credential at a time, so the query can only use a single
     Input Descriptor at a time. The Verifier can call the Platform API to gather multiple
     credentials until the requirements are fulfilled.
-- The Authorization Request defined in (#name-authorization-request) in the `params` field with:
+- The Authorization Request defined in (#authorization-request) in the `params` field with:
   - The `response_mode` set to `platform_api` defined in (#response_mode_platform_api)
   - No `redirect_uri`.
 
 Upon the resolution of the platform API, the Verifier MUST use the `token` response in the same manner
-defined in (#name-response).
+defined in (#response).
 
 For example:
 
 ```javascript
 // The resulting object and how to use it conforms to the following 
-// definition in #name-response.
+// definition in #response.
 const {token: {vpToken}} = await navigator.credentials.get({
   dc: {
     params: {
-      // The Authorization Request as defined in #name-authorization-request
+      // The Authorization Request as defined in #authorization-request
       response_type:"vp_token",
       nonce: "n-0S6_WzA2Mj",
       // The Wallet is told to respond through the browser/platform API
