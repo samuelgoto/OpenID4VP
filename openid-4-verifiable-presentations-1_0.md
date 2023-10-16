@@ -610,6 +610,10 @@ If the response does not contain a parameter, the Wallet is not required by this
 
 Note: In the Response Mode `direct_post` or `direct_post.jwt`, the Wallet can change the UI based on the verifier's callback to the wallet following the submission of the Authorization Response.
 
+## Response Mode "platform_api" {#response_mode_platform_api}
+
+The Response Mode `platform_api` allows the Wallet to send the Authorization Response back to the verifier via Platform APIs as defined in (#platform-api).
+
 ## Signed and Encrypted Responses {#jarm}
 
 This section defines how Authorization Response containing a VP Token can be signed and/or encrypted at the application level when the Response Type value is `vp_token` or `vp_token id_token`. Encrypting the Authorization Response can prevent personal data in the Authorization Response from leaking, when the Authorization Response is returned through the front channel (e.g., the browser).
@@ -981,13 +985,28 @@ if (window.IdentityCredential) {
 
 When that happens, the Verifier MAY choose to use it as a wallet invocation mechanism as defined in (#wallet-invocation).
 
+The Verifier MUST use:
+
+- The Presentation Exchange query in the `selector` field.
+  - The Platform API returns a single credential at a time, so the query can only use a single
+    Input Descriptor at a time. The Verifier can call the Platform API to gather multiple
+    credentials until the requirements are fulfilled.
+- The Authorization Request defined in (#name-authorization-request) in the `params` field with:
+  - The `response_mode` set to `platform_api` defined in (#response_mode_platform_api)
+  - No `redirect_uri`.
+
+Upon the resolution of the platform API, the Verifier MUST use the `token` response in the same manner
+defined in (#name-response).
+
+For example:
+
 ```javascript
-// The resulting object and how to process it conforms to the following 
-// definition in (#name-response).
-const result = await navigator.credentials.get({
+// The resulting object and how to use it conforms to the following 
+// definition in #name-response.
+const {token: {vpToken}} = await navigator.credentials.get({
   dc: {
     params: {
-      // The Authorization Request
+      // The Authorization Request as defined in #name-authorization-request
       response_type="vp_token",
       client_id="https://client.example.com",
       nonce: "n-0S6_WzA2Mj",
@@ -998,12 +1017,16 @@ const result = await navigator.credentials.get({
     },
     selector: {
       type: "PresentationExchange",
-      // Example from (#appendix-A.3). Other examples available for VCs, 
+      // Example from #appendix-A.3. Other examples available for VCs, 
       // mDocs and AnnonCreds.
       "id":"mDL-sample-req",
       "input_descriptors":[{
          // Can only use one at a time, because the Platform API is a single
          // credential selector.
+         //
+         // If the Verifier needs more than one credential, it can call the
+         // platform API multiple times until their requirements are 
+         // fulfilled.
          "id":"org.iso.18013.5.1.mDL",
          "format":{
            "mso_mdoc":{
@@ -1031,8 +1054,6 @@ const result = await navigator.credentials.get({
   }
 });
 ```
-
-An important note to consider is that, because the Identity Credential API is a one-credential-at-a-time picker, the Presentation Exchange request has to be constrained to use only a single Input Descriptor at a time.
 
 # Security Considerations {#security_considerations}
 
