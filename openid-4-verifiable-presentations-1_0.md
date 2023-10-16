@@ -969,11 +969,11 @@ Note: If the Verifier's Response Endpoint did not return a `redirect_uri` in ste
 
 Occasionally, the Verifier may be operating in a platform (e.g. a browser) that supports the [Identity Credential](https://github.com/WICG/identity-credential) API.
 
-The Verifier can test is the API is supported by using feature detection:
+The Verifier can test if the API is supported by using feature detection:
 
 ```javascript
 if (window.IdentityCredential) {
-  // Platform supports the the Identity Credential API
+  // Platform supports the Identity Credential API
 } else {
   // Oops, have to fallback to other wallet invocation mechanisms :(
 }
@@ -982,8 +982,8 @@ if (window.IdentityCredential) {
 When that happens, the Verifier MAY choose to use it as a wallet invocation mechanism as defined in (#wallet-invocation).
 
 ```javascript
-// The resulting object and how to process it conforms to following definition:
-// https://code.sgo.to/OpenID4VP/openid-4-verifiable-presentations-wg-draft.html#name-response
+// The resulting object and how to process it conforms to the following 
+// definition in (#name-response).
 const result = await navigator.credentials.get({
   dc: {
     params: {
@@ -998,7 +998,7 @@ const result = await navigator.credentials.get({
     },
     selector: {
       type: "PresentationExchange",
-      // Example from #appendix-A.3.Other examples available for VCs, 
+      // Example from (#appendix-A.3). Other examples available for VCs, 
       // mDocs and AnnonCreds.
       "id":"mDL-sample-req",
       "input_descriptors":[{
