@@ -986,11 +986,6 @@ When that happens, the Verifier MAY choose to use it as a wallet invocation mech
 // https://code.sgo.to/OpenID4VP/openid-4-verifiable-presentations-wg-draft.html#name-response
 const result = await navigator.credentials.get({
   dc: {
-    selector: {
-      type: "PresentationExchange",
-      // Example: https://code.sgo.to/OpenID4VP/openid-4-verifiable-presentations-wg-draft.html#appendix-A.3
-      // ... input descriptors ...
-    },
     params: {
       // The Authorization Request
       response_type="vp_token",
@@ -1000,6 +995,38 @@ const result = await navigator.credentials.get({
       // rather than direct_post / redirects.
       response_mode="platform-api",
       // redirect_uri is explicitly missing because response_mode="platform_api"
+    },
+    selector: {
+      type: "PresentationExchange",
+      // Example from #appendix-A.3.Other examples available for VCs, 
+      // mDocs and AnnonCreds.
+      "id":"mDL-sample-req",
+      "input_descriptors":[{
+         // Can only use one at a time, because the Platform API is a single
+         // credential selector.
+         "id":"org.iso.18013.5.1.mDL",
+         "format":{
+           "mso_mdoc":{
+             "alg":["EdDSA", "ES256"]
+		   },
+         },
+         "constraints":{
+           "limit_disclosure":"required",
+           "fields":[{
+             "path":["$['org.iso.18013.5.1']['family_name']"],
+             "intent_to_retain":false
+          }, {
+            "path":["$['org.iso.18013.5.1']['portrait']"],
+            "intent_to_retain":false
+          }, {
+            "path":["$['org.iso.18013.5.1']['driving_privileges']"],
+            "intent_to_retain":false
+          }, {
+            "path":["$['domestic_namespace']['domestic_data_element_id']"],
+            "intent_to_retain":false
+          }]
+        }
+      }]
     },
   }
 });
