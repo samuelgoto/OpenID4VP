@@ -1005,6 +1005,8 @@ const result = await navigator.credentials.get({
 });
 ```
 
+An important note to consider is that, because the Identity Credential API is a one-credential-at-a-time picker, the Presentation Exchange request has to be constrained to use only a single Input Descriptor at a time.
+
 # Security Considerations {#security_considerations}
 
 ## Preventing Replay of the VP Token {#preventing-replay} 
