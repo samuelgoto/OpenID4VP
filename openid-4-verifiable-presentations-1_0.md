@@ -1007,8 +1007,7 @@ const {token: {vpToken}} = await navigator.credentials.get({
   dc: {
     params: {
       // The Authorization Request as defined in #name-authorization-request
-      response_type="vp_token",
-      client_id="https://client.example.com",
+      response_type:"vp_token",
       nonce: "n-0S6_WzA2Mj",
       // The Wallet is told to respond through the browser/platform API
       // rather than direct_post / redirects.
