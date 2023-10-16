@@ -1008,7 +1008,7 @@ const result = await navigator.credentials.get({
          "format":{
            "mso_mdoc":{
              "alg":["EdDSA", "ES256"]
-		   },
+           },
          },
          "constraints":{
            "limit_disclosure":"required",
