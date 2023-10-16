@@ -706,7 +706,7 @@ The Verifier has the choice of the following mechanisms to invoke a Wallet:
 - Custom URL scheme as an `authorization_endpoint` (for example, `openid4vp://` as defined in (#openid4vp-profile))
 - Domain-bound Universal Links/App link as an `authorization_endpoint`
 - no specific `authorization_endpoint`, user scanning a QR code with Authorization Request using a manually opened Wallet, instead of an arbitrary camera application on a user-device (neither custom URL scheme nor Universal/App link is used)
-- Using a Web Platform API to select credentials
+- Using a (Web or Native) Platform API to select credentials (See (#platform-api) for details).
 
 # Wallet Metadata (Authorization Server Metadata) {#as_metadata_parameters}
 
@@ -964,6 +964,46 @@ Note: If the Verifier's Response Endpoint did not return a `redirect_uri` in ste
 (9) The Response Endpoint returns the VP Token and Presentation Submission for further processing to the Verifier. 
 
 (10) The Verifier checks whether the `nonce` received in the Credential(s) in the VP Token in step (9) corresponds to the `nonce` value from the session. The Verifier then consumes the VP Token and invalidates the `transaction-id`, `request-id` and `nonce` in the session.
+
+## Platform API {#platform-api}
+
+Occasionally, the Verifier may be operating in a platform (e.g. a browser) that supports the [Identity Credential](https://github.com/WICG/identity-credential) API.
+
+The Verifier can test is the API is supported by using feature detection:
+
+```javascript
+if (window.IdentityCredential) {
+  // Platform supports the the Identity Credential API
+} else {
+  // Oops, have to fallback to other wallet invocation mechanisms :(
+}
+```
+
+When that happens, the Verifier MAY choose to use it as a wallet invocation mechanism as defined in (#wallet-invocation).
+
+```javascript
+// The resulting object and how to process it conforms to following definition:
+// https://code.sgo.to/OpenID4VP/openid-4-verifiable-presentations-wg-draft.html#name-response
+const result = await navigator.credentials.get({
+  dc: {
+    selector: {
+      type: "PresentationExchange",
+      // Example: https://code.sgo.to/OpenID4VP/openid-4-verifiable-presentations-wg-draft.html#appendix-A.3
+      // ... input descriptors ...
+    },
+    params: {
+      // The Authorization Request
+      response_type="vp_token",
+      client_id="https://client.example.com",
+      nonce: "n-0S6_WzA2Mj",
+      // The Wallet is told to respond through the browser/platform API
+      // rather than direct_post / redirects.
+      response_mode="platform-api",
+      // redirect_uri is explicitly missing because response_mode="platform_api"
+    },
+  }
+});
+```
 
 # Security Considerations {#security_considerations}
 
