@@ -1014,7 +1014,13 @@ const {token: {vpToken}} = await navigator.credentials.get({
       // The Wallet is told to respond through the browser/platform API
       // rather than direct_post / redirects.
       response_mode:"platform-api",
-      // redirect_uri is explicitly missing because response_mode="platform_api"
+      // redirect_uri is explicitly missing because response_mode="platform_api",
+      client_metadata: {
+        // A grab bag of parameters for the wallet related to the Verifier.
+
+        // The verifier's public key, used to encrypt the response.
+        readerPublicKey: "ftl+VEHPB17r2 ... Nioc9QZ7X/6w...",
+      }
     },
     selector: {
       type: "PresentationExchange",
